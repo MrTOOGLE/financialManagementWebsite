@@ -1,10 +1,9 @@
 from flask import Flask, render_template, request, redirect, g, flash
 import sqlite3
-from models.functions import closeDB
 from models.DataBase import DataBase
 from models.UserLogin import UserLogin
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_login import LoginManager, login_user, login_required, current_user
+from flask_login import LoginManager, login_user, login_required, current_user, logout_user
 
 SECRET_KEY = 'fdgfh78@#5?>gfhf89dx,v06k'
 
@@ -90,22 +89,48 @@ def registration():
     if request.method == 'POST':
         mail = request.form.get('Mail')
         password = request.form.get('Password')
-        if len(password) > 3 and len(mail) > 3:
-            password = generate_password_hash(password)
-            if dbase.addUser(mail, password):
-                flash("Вы успешно зарегестрировались", "success")
-                return redirect('signUp')
+        name = request.form.get('Name')
+        balance = request.form.get('Balance')
+        try:
+            balance = int(balance)
+            if len(password) > 3 and len(mail) > 3 and balance >= 0:
+                password = generate_password_hash(password)
+                if dbase.addUser(mail, password, name, balance):
+                    flash("Вы успешно зарегестрировались", "success")
+                    return redirect('signUp')
+                else:
+                    flash("Аккаунт с этой почтой уже зарегестрирован", "error")
             else:
-                flash("Аккаунт с этой почтой уже зарегестрирован", "error")
-        else:
-            flash("Слишком короткий пароль/почта", "error")
+                flash("Слишком короткий пароль/почта или баланс меньше 0", "error")
+        except ValueError:
+            flash("Баланс должен быть числом", "error")
     return render_template('registration.html')
+
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect('/index')
 
 
 @app.route('/profile')
 @login_required
 def profile():
-    return f"your id: {current_user.get_id()}"
+    user = dbase.getUser(current_user.get_id())
+    return render_template('profile.html', name=user[3], balance=user[4])
+
+
+@app.route('/change_balance')
+@login_required
+def change_balance():
+    return render_template('change_balance.html')
+
+
+@app.route('/operations')
+@login_required
+def operations():
+    return render_template('operations.html')
 
 
 if __name__ == "__main__":

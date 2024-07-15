@@ -13,11 +13,6 @@ body {
     margin: 0;
 }
 
-.img_main {
-    max-inline-size: 40%;
-    block-size: auto;
-}
-
 h3 {
     color: LimeGreen;
 }
@@ -31,10 +26,9 @@ form {
     margin-right: auto;
     margin-left: auto;
     text-align: center;
-
 }
 
-input[type=text], input[type=password] {
+input[type=text], input[type=password], input[type=name], input[type=balance]{
     text-align: center;
     -webkit-border-radius: 4px;
     width: auto;

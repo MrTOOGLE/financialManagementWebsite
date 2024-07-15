@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Профиль
+{% endblock %}
+
+{% block content %}
+<div align="center">
+    <img src="static/images/rich_man.png" width="400">
+</div>
+<h2>Приветствую вас, <span style="color: DarkOrange">{{name}}</span><br>Ваш баланс: <span
+        style="color: ForestGreen">{{balance}}</span> рублей</h2>
+{% endblock %}

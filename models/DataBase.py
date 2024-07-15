@@ -25,13 +25,13 @@ class DataBase:
             print(e)
         return False
 
-    def addUser(self, mail, password):
+    def addUser(self, mail, password, name, balance):
         try:
             self.__cursor.execute(f"SELECT COUNT() as `count` FROM users WHERE mail LIKE '{mail}'")
             res = self.__cursor.fetchone()
             if res['count'] > 0:
                 return False
-            self.__cursor.execute("INSERT INTO users VALUES(NULL, ?, ?)", (mail, password))
+            self.__cursor.execute("INSERT INTO users VALUES(NULL, ?, ?, ?, ?)", (mail, password, name, balance))
             self.__db.commit()
         except Exception as e:
             print("╰（‵□′）╯" + str(e))
