@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Добавление доходов
+{% endblock %}
+
+{% block content %}
+<form method="POST">
+    {% for cat, msg in get_flashed_messages(True) %}
+    <div class="flash {{cat}}">{{msg}}</div>
+    {% endfor %}
+
+    <br>
+    <label>Введите сумму</label>
+    <input type="text" placeholder="руб." name="Money" required>
+    <hr>
+    <label>Выберите категорию</label><br><br>
+    <select name="income_category">
+        <option value="Зарплата" selected>Зарплата</option>
+        <option value="Вклад">Вклад</option>
+        <option value="Подарок">Подарок</option>
+        <option value="Другое">Другое</option>
+    </select>
+    <hr>
+    <label>Комментарий</label>
+    <input type="text" placeholder="Необязательно" name="Comment" required>
+    <button type="submit">Записать</button>
+</form>
+{% endblock %}

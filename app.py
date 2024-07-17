@@ -121,10 +121,28 @@ def profile():
     return render_template('profile.html', name=user[3], balance=user[4])
 
 
-@app.route('/change_balance')
+@app.route('/add_income', methods=['GET', 'POST'])
 @login_required
-def change_balance():
-    return render_template('change_balance.html')
+def add_income():
+    if request.method == 'POST':
+        money = request.form.get('Money')
+        category = request.form.get('income_category')
+        comment = request.form.get('Comment')
+        #TODO: доделатб =)
+        try:
+            money = float(money)
+        except ValueError:
+            flash("Сумма должна быть числом", "error")
+
+        flash("Доходы были успешно записаны", "success")
+        return redirect('profile')
+    return render_template('income.html')
+
+
+@app.route('/add_expenses')
+@login_required
+def add_expenses():
+    return render_template('expenses.html')
 
 
 @app.route('/operations')

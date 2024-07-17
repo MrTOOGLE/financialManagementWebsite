@@ -8,6 +8,11 @@
 <div align="center">
     <img src="static/images/rich_man.png" width="400">
 </div>
+
+{% for cat, msg in get_flashed_messages(True) %}
+<div class="flash {{cat}}">{{msg}}</div>
+{% endfor %}
+
 <h2>Приветствую вас, <span style="color: DarkOrange">{{name}}</span><br>Ваш баланс: <span
         style="color: ForestGreen">{{balance}}</span> рублей</h2>
 {% endblock %}
