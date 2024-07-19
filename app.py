@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, g, flash
 import sqlite3
 from models.DataBase import DataBase
 from models.UserLogin import UserLogin
+from models.functions import add_income_or_expenses
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, login_user, login_required, current_user, logout_user
 
@@ -128,26 +129,38 @@ def add_income():
         money = request.form.get('Money')
         category = request.form.get('income_category')
         comment = request.form.get('Comment')
-        #TODO: доделатб =)
-        try:
-            money = float(money)
-        except ValueError:
-            flash("Сумма должна быть числом", "error")
-
-        flash("Доходы были успешно записаны", "success")
-        return redirect('profile')
+        user_id = current_user.get_id()
+        if not add_income_or_expenses(user_id, category, "income", money, comment, dbase):
+            flash("Ошибка в заполнении формы", "error")
+        else:
+            flash("Доходы были успешно записаны", "success")
+            return redirect('profile')
     return render_template('income.html')
 
 
-@app.route('/add_expenses')
+@app.route('/add_expenses', methods=['GET', 'POST'])
 @login_required
 def add_expenses():
+    if request.method == 'POST':
+        money = request.form.get('Money')
+        category = request.form.get('expenses_category')
+        comment = request.form.get('Comment')
+        user_id = current_user.get_id()
+        if not add_income_or_expenses(user_id, category, "expenses", money, comment, dbase):
+            flash("Ошибка в заполнении формы", "error")
+        else:
+            flash("Доходы были успешно записаны", "success")
+            return redirect('profile')
     return render_template('expenses.html')
 
 
 @app.route('/operations')
 @login_required
 def operations():
+    res = dbase.getOperations(current_user.get_id())
+    for i in res:
+        print([j for j in i])
+    #TODO: сдлеать шаблон в html
     return render_template('operations.html')
 
 

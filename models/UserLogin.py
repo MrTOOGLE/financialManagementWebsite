@@ -2,6 +2,7 @@ from flask_login import UserMixin
 
 
 class UserLogin():
+    """Класс для удобной работы с залогиненым пользователем"""
     def fromDB(self, user_id, db):
         self.__user = db.getUser(user_id)
         return self
