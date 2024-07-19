@@ -3,3 +3,14 @@
 {% block title %}
 История операций
 {% endblock %}
+
+{% block content %}
+<h3>Список операций</h3>
+{% for operation in operations %}
+<h5>{% if operation[2] == "income" %} Тип:  <span style="color: DarkTurquoise">доходы</span>{% else %} Тип:  <span style="color: Tomato">расходы</span> {% endif %}</h5>
+<li><strong>Категория:</strong> {{operation[1]}}</li>
+<li><strong>Сумма:</strong> {{operation[3]}}</li>
+{% if operation[4] != "" %}<li><strong>Комментарий:</strong>{{operation[4]}}</li>{% endif %}
+<br>
+{% endfor %}
+{% endblock %}

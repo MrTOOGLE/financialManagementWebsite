@@ -158,10 +158,7 @@ def add_expenses():
 @login_required
 def operations():
     res = dbase.getOperations(current_user.get_id())
-    for i in res:
-        print([j for j in i])
-    #TODO: сдлеать шаблон в html
-    return render_template('operations.html')
+    return render_template('operations.html', operations=res)
 
 
 if __name__ == "__main__":
